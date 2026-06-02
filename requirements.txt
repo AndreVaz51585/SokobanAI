@@ -1,0 +1,12 @@
+1. Representação do tabuleiro --- FEITO
+2. Representação do jogador --- FEITO
+3. Movimentos simples --- FEITO
+4. Objetivo = jogador chega a uma posição --- FEITO
+
+5. Integrar no planner Goal Regression + A*
+
+6. Adicionar caixa
+7. Adicionar push
+8. Objetivo = caixa chega ao alvo
+9. Múltiplas caixas
+10. Deadlocks
