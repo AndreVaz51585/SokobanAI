@@ -7,6 +7,8 @@
 
 6. Adicionar caixa
 7. Adicionar push
+
 8. Objetivo = caixa chega ao alvo
+
 9. Múltiplas caixas
 10. Deadlocks

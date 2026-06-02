@@ -53,6 +53,30 @@ Plan = [
 */
 
 
+final_goals([
+    box(b1,G1R,G1C),
+	box(b2,G2R,G2C)
+]):-
+	goal_cell(G1R,G1C),
+	goal_cell(G2R,G2C),
+	(G1R \== G2R ; G1C \== G2C).
+
+solve(Plan) :-
+    final_goals(Goals),
+    bestfirst(Goals -> stop, Plan).
+
+solve_actions(Actions) :-
+    solve(RegressionPlan),
+    extract_actions(RegressionPlan, Actions).
+
+extract_actions([], []).
+
+extract_actions([_ -> stop], []).
+
+extract_actions([_ -> Action | Rest], [Action | Actions]) :-
+    Action \== stop,
+    extract_actions(Rest, Actions).
+
 
 
 
