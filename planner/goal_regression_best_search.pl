@@ -6,6 +6,8 @@ Figure 17.6.
 
 % State-space representation of means-ends planning with goal regression
 
+:- use_module('../domain/sokoban_domain', [goal_cell/2, start/1]).
+
 :- consult('means_ends_goal_regression.pl').
 :- consult('astar.pl').
 
@@ -53,13 +55,28 @@ Plan = [
 */
 
 
-final_goals([
-    box(b1,G1R,G1C),
-	box(b2,G2R,G2C)
-]):-
-	goal_cell(G1R,G1C),
-	goal_cell(G2R,G2C),
-	(G1R \== G2R ; G1C \== G2C).
+final_goals(Goals) :-
+    start(State),
+    findall(BoxId, member(box(BoxId, _, _), State), BoxIds),
+    BoxIds \= [],
+    findall(goal(Row, Col), goal_cell(Row, Col), GoalCells),
+    assign_goals(BoxIds, GoalCells, Goals).
+
+final_goals([at_player(Row, Col)]) :-
+    start(State),
+    \+ member(box(_, _, _), State),
+    goal_cell(Row, Col).
+
+assign_goals([], _, []).
+
+assign_goals([BoxId | BoxIds], GoalCells, [box(BoxId, Row, Col) | Goals]) :-
+    select_goal_cell(goal(Row, Col), GoalCells, RemainingGoalCells),
+    assign_goals(BoxIds, RemainingGoalCells, Goals).
+
+select_goal_cell(GoalCell, [GoalCell | GoalCells], GoalCells).
+
+select_goal_cell(GoalCell, [OtherGoalCell | GoalCells], [OtherGoalCell | RemainingGoalCells]) :-
+    select_goal_cell(GoalCell, GoalCells, RemainingGoalCells).
 
 solve(Plan) :-
     final_goals(Goals),
@@ -76,9 +93,6 @@ extract_actions([_ -> stop], []).
 extract_actions([_ -> Action | Rest], [Action | Actions]) :-
     Action \== stop,
     extract_actions(Rest, Actions).
-
-
-
 
 
 

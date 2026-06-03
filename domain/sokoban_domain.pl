@@ -12,6 +12,10 @@
 
 :- use_module(library(clpfd)).
 
+:- dynamic start/1.
+:- dynamic wall/2.
+:- dynamic goal_cell/2.
+
 
 
 
@@ -44,15 +48,16 @@ wall(4,0). wall(4,1). wall(4,2). wall(4,3). wall(4,4).
 % ]).
 
 start([
-    at_player(2,2),
-    box(b1,2,1),
-    free(1,1), free(1,2), free(1,3),
-    free(2,3),
+    at_player(1,1),
+    box(b1,2,2),
+    box(b2,2,3),
+    free(1,2), free(1,3),
+    free(2,1),
     free(3,1), free(3,2), free(3,3)
 ]).
 
 
-% goal_cell(3, 2).
+goal_cell(3, 2).
 goal_cell(3, 3).
 
 direction(north, -1, 0).

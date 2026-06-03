@@ -1,4 +1,4 @@
-:- module(board, [
+:- module(sokoban_board, [
     print_board/1
 ]).
 
