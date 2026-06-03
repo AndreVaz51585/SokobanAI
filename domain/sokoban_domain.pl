@@ -7,7 +7,8 @@
     wall/2,
     direction/3,
     valid_position/2,
-    goal_cell/2
+    goal_cell/2,
+    board_size/2
 ]).
 
 :- use_module(library(clpfd)).
@@ -15,6 +16,7 @@
 :- dynamic start/1.
 :- dynamic wall/2.
 :- dynamic goal_cell/2.
+:- dynamic board_size/2.
 
 
 
@@ -66,9 +68,17 @@ direction(west,   0, -1).
 direction(east,   0, 1).
 
 valid_position(Row, Col) :-
-    Row >= 0,
-    Col >= 0,
+    Row #>= 0,
+    Col #>= 0,
+    within_board(Row, Col),
     \+ wall(Row, Col).
+
+within_board(Row, Col) :-
+    board_size(Rows, Cols), !,
+    Row #< Rows,
+    Col #< Cols.
+
+within_board(_, _).
 
 
 can(move(Direction, Row, Col, NewRow, NewCol), [

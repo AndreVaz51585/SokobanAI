@@ -33,6 +33,18 @@ puzzle(dificil, 'Dificil', [
     ['#','#','#','#','#','#','#']
 ]).
 
+puzzle(super_dificil, 'Super Dificil', [
+    ['#','#','#','#','#','#','#','#','#','#'],
+    ['#','@',' ',' ',' ',' ',' ',' ',' ','#'],
+    ['#',' ','#','#','#',' ','#',' ',' ','#'],
+    ['#',' ',' ',' ',' ',' ',' ',' ',' ','#'],
+    ['#',' ',' ',' ','$','$','$',' ',' ','#'],
+    ['#',' ',' ','.','.','.',' ',' ',' ','#'],
+    ['#',' ',' ',' ','#',' ',' ',' ',' ','#'],
+    ['#',' ',' ',' ',' ',' ',' ',' ',' ','#'],
+    ['#','#','#','#','#','#','#','#','#','#']
+]).
+
 test_board(Board) :-
     puzzle(intermedio, _, Board),
     setup_puzzle(Board).
@@ -78,6 +90,7 @@ choose_difficulty(Difficulty) :-
     write('1 - Facil'), nl,
     write('2 - Intermedio'), nl,
     write('3 - Dificil'), nl,
+    write('4 - Super Dificil'), nl,
     write('Opcao: '),
     read_line_to_string(user_input, Choice),
     difficulty_choice(Choice, Difficulty), !.
@@ -93,20 +106,34 @@ difficulty_choice("2", intermedio).
 difficulty_choice("2.", intermedio).
 difficulty_choice("3", dificil).
 difficulty_choice("3.", dificil).
+difficulty_choice("4", super_dificil).
+difficulty_choice("4.", super_dificil).
 difficulty_choice("facil", facil).
 difficulty_choice("facil.", facil).
 difficulty_choice("intermedio", intermedio).
 difficulty_choice("intermedio.", intermedio).
 difficulty_choice("dificil", dificil).
 difficulty_choice("dificil.", dificil).
+difficulty_choice("super_dificil", super_dificil).
+difficulty_choice("super_dificil.", super_dificil).
+difficulty_choice("super dificil", super_dificil).
+difficulty_choice("super dificil.", super_dificil).
 
 setup_puzzle(Board) :-
     retractall(sokoban_domain:start(_)),
     retractall(sokoban_domain:wall(_, _)),
     retractall(sokoban_domain:goal_cell(_, _)),
+    retractall(sokoban_domain:board_size(_, _)),
+    board_dimensions(Board, Rows, Cols),
+    assertz(sokoban_domain:board_size(Rows, Cols)),
     load_rows(Board, 0, 1, [], StartFacts),
     reverse(StartFacts, Start),
     assertz(sokoban_domain:start(Start)).
+
+board_dimensions(Board, Rows, Cols) :-
+    length(Board, Rows),
+    Board = [FirstRow | _],
+    length(FirstRow, Cols).
 
 load_rows([], _, BoxCounter, StartFacts, StartFacts) :-
     BoxCounter >= 1.
